@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15" version="24.7.16">
   <diagram name="Page-1" id="90a13364-a465-7bf4-72fc-28e22215d7a0">
-    <mxGraphModel dx="2022" dy="1342" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1.5" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
+    <mxGraphModel dx="939" dy="623" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1.5" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" style=";html=1;" />
         <mxCell id="1" style=";html=1;" parent="0" />
@@ -1568,6 +1568,20 @@
         </mxCell>
         <mxCell id="7Mn972qCDqTTPwqUOZgQ-453" value="* Every registers have &lt;u&gt;RD&lt;/u&gt;, &lt;u&gt;WR&lt;/u&gt;, and ACK8 signals." style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="900" y="1610" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7Mn972qCDqTTPwqUOZgQ-456" value="FC[2:0]" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;width=9.655172413793103;endSize=5.565517241379311;align=left;labelPosition=left;verticalLabelPosition=middle;verticalAlign=middle;spacingLeft=0;spacingRight=0;endWidth=12.651605231866826;" edge="1" parent="1">
+          <mxGeometry x="1" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="250" y="730" as="sourcePoint" />
+            <mxPoint x="300" y="730" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7Mn972qCDqTTPwqUOZgQ-457" value="FC[2:0]" style="shape=flexArrow;endArrow=none;html=1;rounded=0;width=9.655172413793103;endSize=5.565517241379311;align=left;labelPosition=left;verticalLabelPosition=middle;verticalAlign=middle;spacingLeft=0;spacingRight=0;endWidth=12.651605231866826;startArrow=block;endFill=0;startWidth=12.651605231866826;startSize=5.565517241379311;" edge="1" parent="1">
+          <mxGeometry x="1" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="480" y="370" as="sourcePoint" />
+            <mxPoint x="510" y="370" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
