@@ -1,0 +1,2315 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title></title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="index.css" />
+    </head>
+    <body>
+        <h1>Extensible Homebrew Computer Detailed System Manual</h1>
+        <section id="docinfo">
+            <span class="revision">Release 0 Preliminary</span>
+            <address class="author">
+                By <a rel="author" href="">Minsu Kwon (kms1212)</a>
+            </address>
+            <time pubdate datetime="2024-09-29">September 29 2024</time>
+        </section>
+
+        <section class="toc-exclude">
+            <h1>Copyright Information</h1>
+            <p>
+                All files in this project archive (or repository) excluding
+                documents which specifies any other license in its header or
+                “LICENSE” file of its parent directory follow BSD-2-Clause,
+                except for the that the font data of documentations using
+                template which is used in this documentation: The contents of
+                this repository do not warrant its proper operation, and does
+                not warrant its correct documentation. Reading this document, it
+                is recommtded to check its desired operation from code or binary
+                files on your own.
+            </p>
+
+            <h2>Trademarks</h2>
+            <ul>
+                <li>
+                    IBM-PC is a registered trademark of International Business
+                    Machines Corp.
+                </li>
+                <li>Macintosh is a trademark of Apple Inc.</li>
+                <li>UNIX is a registered trademark of AT&amp;T.</li>
+                <li>
+                    FLEX, MAX, and Altera is a registered trademark of Altera
+                    Corp. acquired by Intel Corp.
+                </li>
+                <li>
+                    AVR is a registered trademark of Atmel Corp. acquired by
+                    Microchip Technology Inc.
+                </li>
+            </ul>
+
+            <h2>License</h2>
+            <p>
+                BSD-2-Clause LICENSE<br />
+                Copyright 2024 Minsu Kwon (kms1212)<br /><br />
+
+                Redistribution and use in source and binary forms, with or
+                without modification, are permitted provided that the following
+                conditions are met:<br /><br />
+
+                1. Redistributions of source code must retain the above
+                copyright notice, this list of conditions and the following
+                disclaimer.<br /><br />
+
+                2. Redistributions in binary form must reproduce the above
+                copyright notice, this list of conditions and the following
+                disclaimer in the documentation and/or other materials provided
+                with the distribution.<br /><br />
+
+                THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+                CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES,
+                INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+                MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+                DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+                CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+                SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+                LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+                USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+                AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+                LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+                IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+                THE POSSIBILITY OF SUCH DAMAGE.
+            </p>
+        </section>
+
+        <section class="toc-exclude">
+            <h1>Before You Read This Document...</h1>
+            <p>
+                This document is detailed system manual of the homebrew computer
+                powered by Motorola MC68030 Microprocessor. Its coverage is from
+                low-level hardware structures and electrical characteristics to
+                firmware operation calls to create your own bootloader and
+                operating system, port existing applications or operating
+                systems to this architecture. This is an free and open computer
+                architecture; you can freely create, modify, delete, and
+                redistribute any contents of it without almost every limitation.
+                To read detailed information, see the license text inside of a
+                box in the previous page.
+            </p>
+
+            <h2>Contacts</h2>
+            <p>
+                You can visit
+                <a href="https://github.com/ehbc-project/ehbc-docs"
+                    >https://github.com/ehbc-project/ehbc-docs</a
+                >
+                to create an issue to this repository.
+            </p>
+
+            <h2>Related Documents</h2>
+            <p>
+                More detailed informations of each components/standard used in
+                this architecture may be needed to comprehtd their operation,
+                referencing documents in following table is recommded.
+            </p>
+            <table class="list">
+                <tr>
+                    <th>Title</th>
+                    <th>Contents</th>
+                </tr>
+                <tr>
+                    <td>
+                        <a
+                            href="https://www.nxp.com/docs/en/reference-manual/MC68030UM.pdf"
+                            >MC68030 Enhanced 32-Bit Microprocessor User's
+                            Manual</a
+                        >
+                    </td>
+                    <td>Detailed description of MC68030 Microprocessor</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a
+                            href="https://www.nxp.com/docs/en/reference-manual/MC68881UM.pdf"
+                            >MC68881/MC68882 Floating-Point Coprocessor User's
+                            Manual</a
+                        >
+                    </td>
+                    <td>
+                        Detailed description of MC68882 Floating-point
+                        coprocessor
+                    </td>
+                </tr>
+                <tr>
+                    <td>FLEX® 6000 PLD Family Datasheet</td>
+                    <td>
+                        Electrical characteristics, device architecture, timing
+                        parameters, etc. of Altera® FLEX® 6000 FPGA Family
+                    </td>
+                </tr>
+                <tr>
+                    <td>MAX® 7000 PLD Family Datasheet</td>
+                    <td>
+                        Electrical characteristics, device architecture, ISP
+                        programming methods, timing parameters, etc. of Altera®
+                        MAX® 7000 CPLD Family
+                    </td>
+                </tr>
+                <tr>
+                    <td>Altera® Configuration Handbook</td>
+                    <td>Configuration methods for Altera® FPGA Families.</td>
+                </tr>
+                <tr>
+                    <td>JEDEC Standard No.21-C Page 4.4.2</td>
+                    <td>
+                        Description of JEDEC 72-pin SIMM Memory module standard.
+                    </td>
+                </tr>
+                <tr>
+                    <td>030HBC Software Development Supplement Manual</td>
+                    <td>
+                        Considerations and detailed information regarding
+                        software (Bootloader/OS/Application) development
+                    </td>
+                </tr>
+            </table>
+            <p>
+                Note that this list of related documents can be updated without
+                noticing.
+            </p>
+        </section>
+
+        <section class="toc-exclude">
+            <h1>Table of Contents</h1>
+            <nav>
+                <ul id="toc"></ul>
+
+                <h2>Figures</h2>
+                <ul id="tof"></ul>
+
+                <h2>Tables</h2>
+                <ul id="tot"></ul>
+            </nav>
+        </section>
+
+        <section>
+            <h1>Overview</h1>
+            <p>
+                Contents in this chapter roughly explains about the entire
+                architecture of the `030 Extensible Homebrew Computer. The
+                architecture of this system is designed to provide flexible
+                operations, rich system functions, and large expansion
+                capabilities.
+            </p>
+
+            <h2>Features</h2>
+            <p>
+                The features and characteristics of the `030 Extensible Homebrew
+                Computer (hereafter 'EHBC') are listed as follows:
+            </p>
+            <ul>
+                <li>
+                    Powered by a Motorola MC68030 microprocessor and a MC68882
+                    coprocessor
+                    <ul>
+                        <li>
+                            32-bit microprocessor up to 50 MHz of operation
+                            clock
+                        </li>
+                        <li>
+                            Integrated 256-byte data cache and 256-byte
+                            instruction cache
+                        </li>
+                        <li>
+                            Paged Memory-Management Unit (MMU) integrated for
+                            memory protection
+                        </li>
+                        <li>7 levels of interrupt autovector</li>
+                        <li>
+                            A MC68882 floating-point coprocessor which
+                            accelerates real-number arithmetic is installable
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    Configurable processor frequency up to 50MHz and two fixed
+                    clocks at 24MHz and at 14.61818MHz
+                </li>
+                <li>Four 72-pin SIMMs for DRAM capacity up to 128MiB</li>
+                <li>
+                    A System Controller Unit (SCU) implemented on FPGA
+                    <ul>
+                        <li>Configurable CPU clock</li>
+                        <li>CPU burst cache fill operation</li>
+                        <li>DRAM controller</li>
+                        <li>IDE/ISA bus controller</li>
+                        <li>Power management features</li>
+                        <li>
+                            23-channel interrupt controller including 3-channel
+                            high precision timer IRQ
+                        </li>
+                    </ul>
+                </li>
+                <li>4 DMA channels</li>
+                <li>Full support of IRQ signals driven by ISA bus devices</li>
+                <li>8 programmable timers including refresh counter</li>
+                <li>
+                    Rich capabilities of adapter and peripheral interconnection:
+                    <ul>
+                        <li>1 floppy drive port</li>
+                        <li>1 IDE bus port</li>
+                        <li>PS/2 keyboard and mouse interface</li>
+                        <li>2 RS232 serial port</li>
+                        <li>Speaker/Microphone/Line-in audio jack</li>
+                        <li>3 sets of 16-bit ISA card-edge connector</li>
+                    </ul>
+                </li>
+                <li>Coin cell battery backup for a RTC and a NVSRAM</li>
+                <li>1MiB Flash Memory for Firmware</li>
+                <li>A 24-pin ATX power supply connector for power inputs</li>
+            </ul>
+
+            <h2>System Performance</h2>
+        </section>
+        <section>
+            <h1>Processor & Coprocessor</h1>
+
+            <h2>The Main Processor</h2>
+            <h2>The Coprocessor</h2>
+        </section>
+        <section>
+            <h1>Memory Subsystem</h1>
+
+            <h2>System Memory Map</h2>
+            <figure class="memory-map">
+                <div>
+                    <div>
+                        <div>FF000000</div>
+                        <div>FFFFFFFF</div>
+                    </div>
+                    <div>MMIO Area</div>
+                </div>
+                <div>
+                    <div>
+                        <div>FE100000</div>
+                        <div>FEFFFFFF</div>
+                    </div>
+                    <div>ISA SMEM Area</div>
+                </div>
+                <div>
+                    <div>
+                        <div>FE010000</div>
+                        <div>FE0FFFFF</div>
+                    </div>
+                    <div>ISA MEM Area</div>
+                </div>
+                <div>
+                    <div>
+                        <div>FE000000</div>
+                        <div>FE00FFFF</div>
+                    </div>
+                    <div>ISA I/O Area</div>
+                </div>
+                <div>
+                    <div>
+                        <div>FD000000</div>
+                        <div>FDFFFFFF</div>
+                    </div>
+                    <div>Boot Firmware Area (Maximum)</div>
+                </div>
+                <div>
+                    <div>
+                        <div>FC000000</div>
+                        <div>FCFFFFFF</div>
+                    </div>
+                    <div>Reserved</div>
+                </div>
+                <div>
+                    <div>
+                        <div>00000007</div>
+                        <div>FBFFFFFF</div>
+                    </div>
+                    <div>System Memory (Maxmimum)</div>
+                </div>
+                <div>
+                    <div>
+                        <div>00000000</div>
+                        <div>00000007</div>
+                    </div>
+                    <div>Boot Vector or System Memory</div>
+                </div>
+                <figcaption>System Memory Map</figcaption>
+            </figure>
+
+            <h2>DRAM Modules</h2>
+            <h2>Memory-Mapped I/O</h2>
+            <h2>Direct Memory Access</h2>
+        </section>
+        <section>
+            <h1>System Controller Unit</h1>
+
+            <h2>Register Description</h2>
+            <article class="register-description">
+                <h1>Register 00h: CPU Configuration Register (CCR)</h1>
+
+                <table>
+                    <tr>
+                        <th>Default Value</th>
+                        <td>00h</td>
+                    </tr>
+                    <tr>
+                        <th>Operation</th>
+                        <td>Read / Write</td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td>7</td>
+                        <td>Force CPU Clock to 8 MHz</td>
+                    </tr>
+                    <tr>
+                        <td>6-4</td>
+                        <td>
+                            CPU Clock
+                            <table>
+                                <tr>
+                                    <td>000</td>
+                                    <td>33.333 MHz</td>
+                                </tr>
+                                <tr>
+                                    <td>001</td>
+                                    <td>80 MHz</td>
+                                </tr>
+                                <tr>
+                                    <td>010</td>
+                                    <td>66.667 MHz</td>
+                                </tr>
+                                <tr>
+                                    <td>011</td>
+                                    <td>50 MHz</td>
+                                </tr>
+                                <tr>
+                                    <td>100</td>
+                                    <td>40 MHz</td>
+                                </tr>
+                                <tr>
+                                    <td>101</td>
+                                    <td>60 MHz</td>
+                                </tr>
+                                <tr>
+                                    <td>110</td>
+                                    <td>25 MHz</td>
+                                </tr>
+                                <tr>
+                                    <td>111</td>
+                                    <td>20 MHz</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3-2</td>
+                        <td>Reserved</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Disable Boot Interrupt Vector</td>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>Enable CPU Burst Operation</td>
+                    </tr>
+                </table>
+            </article>
+            <article class="register-description">
+                <h1>Register 01h: DRAM Configuration Register (DCR)</h1>
+
+                <table>
+                    <tr>
+                        <th>Default Value</th>
+                        <td>00h</td>
+                    </tr>
+                    <tr>
+                        <th>Operation</th>
+                        <td>Read / Write</td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td>7</td>
+                        <td>Reserved</td>
+                    </tr>
+                    <tr>
+                        <td>6-4</td>
+                        <td>Address Mapping Mode</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>
+                            RAS to CAS Delay
+                            <table>
+                                <tr>
+                                    <td>0</td>
+                                    <td>3 CPU clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2 CPU clocks</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Reserved</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>
+                            Write Cycle CAS Pulse Width
+                            <table>
+                                <tr>
+                                    <td>0</td>
+                                    <td>2 CPU clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>1 CPU clock</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>
+                            RAS Precharge Time
+                            <table>
+                                <tr>
+                                    <td>0</td>
+                                    <td>2 CPU clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>1 CPU clock</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </article>
+
+            <article class="register-description">
+                <h1>Register 02h: Firmware ROM Configuration Register (FCR)</h1>
+
+                <table>
+                    <tr>
+                        <th>Default Value</th>
+                        <td>00h</td>
+                    </tr>
+                    <tr>
+                        <th>Operation</th>
+                        <td>Read / Write</td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td>7-3</td>
+                        <td>Reserved</td>
+                    </tr>
+                    <tr>
+                        <td>2-0</td>
+                        <td>
+                            ROM Latency
+                            <table>
+                                <tr>
+                                    <td>000</td>
+                                    <td>8 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>001</td>
+                                    <td>1 CPU Clock</td>
+                                </tr>
+                                <tr>
+                                    <td>010</td>
+                                    <td>2 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>011</td>
+                                    <td>3 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>100</td>
+                                    <td>4 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>101</td>
+                                    <td>5 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>110</td>
+                                    <td>6 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>111</td>
+                                    <td>7 CPU Clocks</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </article>
+
+            <article class="register-description">
+                <h1>Register 03h: Power Configuration Register (PCR)</h1>
+
+                <table>
+                    <tr>
+                        <th>Default Value</th>
+                        <td>00h</td>
+                    </tr>
+                    <tr>
+                        <th>Operation</th>
+                        <td>Partial Read / Partial Write</td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td>7</td>
+                        <td>
+                            Power Off System (Read: '0')
+                            <table>
+                                <tr>
+                                    <td>0</td>
+                                    <td>No operation</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Power off system immediately</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>
+                            Reset NMI Status (Read: '0')
+                            <table>
+                                <tr>
+                                    <td>0</td>
+                                    <td>No operation</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Reset NMI raised by power switch</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5-2</td>
+                        <td>Reserved</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            Power Switch Operation
+                            <table>
+                                <tr>
+                                    <td>0</td>
+                                    <td>
+                                        Power off system immediately without
+                                        raising NMI
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Raise NMI</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>
+                            Power Switch Status (Read Only)
+                            <table>
+                                <tr>
+                                    <td>0</td>
+                                    <td>Not pressed</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Pressed</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </article>
+            <article class="register-description">
+                <h1>
+                    Register 04h: IDE Bus Controller Configuration Register 0
+                    (IDER0)
+                </h1>
+
+                <table>
+                    <tr>
+                        <th>Default Value</th>
+                        <td>00h</td>
+                    </tr>
+                    <tr>
+                        <th>Operation</th>
+                        <td>Read / Write</td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td>7</td>
+                        <td>Enable IDE Bus Controller</td>
+                    </tr>
+                    <tr>
+                        <td>6-4</td>
+                        <td>Reserved</td>
+                    </tr>
+                    <tr>
+                        <td>3-0</td>
+                        <td>
+                            Command Delay Time
+                            <table>
+                                <tr>
+                                    <td>0000</td>
+                                    <td>16 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>0001</td>
+                                    <td>1 CPU Clock</td>
+                                </tr>
+                                <tr>
+                                    <td>0010</td>
+                                    <td>2 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>0011</td>
+                                    <td>3 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>0100</td>
+                                    <td>4 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>0101</td>
+                                    <td>5 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>0110</td>
+                                    <td>6 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>0111</td>
+                                    <td>7 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>1000</td>
+                                    <td>8 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>1001</td>
+                                    <td>9 CPU Clock</td>
+                                </tr>
+                                <tr>
+                                    <td>1010</td>
+                                    <td>10 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>1011</td>
+                                    <td>11 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>1100</td>
+                                    <td>12 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>1101</td>
+                                    <td>13 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>1110</td>
+                                    <td>14 CPU Clocks</td>
+                                </tr>
+                                <tr>
+                                    <td>1111</td>
+                                    <td>15 CPU Clocks</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </article>
+
+            <article class="register-description">
+                <h1>
+                    Register 05h: IDE Bus Controller Configuration Register 1
+                    (IDER1)
+                </h1>
+
+                <table>
+                    <tr>
+                        <th>Default Value</th>
+                        <td>00h</td>
+                    </tr>
+                    <tr>
+                        <th>Operation</th>
+                        <td>Read / Write</td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td>7-4</td>
+                        <td>8-Bit Transfer Wait States</td>
+                    </tr>
+                    <tr>
+                        <td>3-0</td>
+                        <td>16-Bit Transfer Wait States</td>
+                    </tr>
+                </table>
+            </article>
+
+            <article class="register-description">
+                <h1>
+                    Register 06h: ISA Bus Controller Configuration Register
+                    (ISAR)
+                </h1>
+
+                <table>
+                    <tr>
+                        <th>Default Value</th>
+                        <td>00h</td>
+                    </tr>
+                    <tr>
+                        <th>Operation</th>
+                        <td>Read / Write</td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td>7-6</td>
+                        <td>
+                            16-Bit Transfer Command Delay
+                            <table>
+                                <tr>
+                                    <td>00</td>
+                                    <td>5 ISACLK</td>
+                                </tr>
+                                <tr>
+                                    <td>01</td>
+                                    <td>2 ISACLK</td>
+                                </tr>
+                                <tr>
+                                    <td>10</td>
+                                    <td>3 ISACLK</td>
+                                </tr>
+                                <tr>
+                                    <td>11</td>
+                                    <td>4 ISACLK</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5-4</td>
+                        <td>8-Bit Transfer Command Delay</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Reserved</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Enable ISA Bus Controller</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            16-Bit Transfer Wait States
+                            <table>
+                                <tr>
+                                    <td>0</td>
+                                    <td>2 ISACLK</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>1 ISACLK</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>
+                            8-Bit Transfer Wait States
+                            <table>
+                                <tr>
+                                    <td>0</td>
+                                    <td>5 ISACLK</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>4 ISACLK</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </article>
+            <article class="register-description">
+                <h1>
+                    Register 08h-0Fh: DRAM Bank Address Boundary Register
+                    (ABR0-ABR7)
+                </h1>
+
+                <table>
+                    <tr>
+                        <th>Default Value</th>
+                        <td>00h</td>
+                    </tr>
+                    <tr>
+                        <th>Operation</th>
+                        <td>Read / Write</td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td>7-0</td>
+                        <td>Address Boundary of the Nth DRAM Bank</td>
+                    </tr>
+                </table>
+            </article>
+        </section>
+
+        <section>
+            <h1>System Bus</h1>
+        </section>
+        <section>
+            <h1>Bootstrap Firmware</h1>
+
+            <h2>Firmware System Calls</h2>
+            <article class="syscall-description">
+                <h1>Category 0000h: Boot Services</h1>
+                <table>
+                    <tr>
+                        <td>0000h</td>
+                        <td>Try to boot from next device</td>
+                    </tr>
+                    <tr>
+                        <td>0001h</td>
+                        <td>
+                            Deinitialize firmware and hide ROM from address
+                            space
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0</td>
+                                        <td>Deinitialization error code</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </article>
+            <article class="syscall-description">
+                <h1>Category 0001h: Async I/O Services</h1>
+                <p>
+                    Asynchronous input / output services for Serial port, Line
+                    printer, etc.
+                </p>
+                <table>
+                    <tr>
+                        <td>0000h</td>
+                        <td>
+                            Initialize port
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(31:20)</td>
+                                        <td>
+                                            Baud Rate
+                                            <table>
+                                                <tr>
+                                                    <td>0h</td>
+                                                    <td>75 baud</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>0h</td>
+                                                    <td>75 baud</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>1h</td>
+                                                    <td>110 baud</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2h</td>
+                                                    <td>135 baud</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3h</td>
+                                                    <td>150 baud</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4h</td>
+                                                    <td>300 baud</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>5h</td>
+                                                    <td>600 baud</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>6h</td>
+                                                    <td>1200 baud</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Ah</td>
+                                                    <td>1800 baud</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>7h</td>
+                                                    <td>2000 baud</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>8h</td>
+                                                    <td>2400 baud</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>9h</td>
+                                                    <td>4800 baud</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Bh</td>
+                                                    <td>9600 baud</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Ch</td>
+                                                    <td>19200 baud</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dh-Fh</td>
+                                                    <td>Reserved</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(19)</td>
+                                        <td>
+                                            Break
+                                            <table>
+                                                <tr>
+                                                    <td>0</td>
+                                                    <td>No break</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>Break</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(18:16)</td>
+                                        <td>
+                                            Parity Mode
+                                            <table>
+                                                <tr>
+                                                    <td>0xx</td>
+                                                    <td>No parity</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>100</td>
+                                                    <td>Odd parity</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>101</td>
+                                                    <td>Even parity</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>110</td>
+                                                    <td>Stick parity odd</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>111</td>
+                                                    <td>Stick parity even</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(15:14)</td>
+                                        <td>
+                                            Stop Bit
+                                            <table>
+                                                <tr>
+                                                    <td>00</td>
+                                                    <td>1 stop bit</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>01</td>
+                                                    <td>1.5 stop bits</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>10</td>
+                                                    <td>2 stop bits</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>11</td>
+                                                    <td>
+                                                        2 stop bits if word
+                                                        length is 6, 7, or 8
+                                                        otherwise 1.5 stop bits
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(13:12)</td>
+                                        <td>
+                                            Word Length
+                                            <table>
+                                                <tr>
+                                                    <td>00</td>
+                                                    <td>5 bits</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>01</td>
+                                                    <td>6 bits</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>10</td>
+                                                    <td>7 bits</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>11</td>
+                                                    <td>8 bits</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(7:0)</td>
+                                        <td>Port Identifier</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0(31:16)</td>
+                                        <td>Port Status</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(15:0)</td>
+                                        <td>Error Code</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0001h</td>
+                        <td>
+                            Wait Buffer and Transmit Character
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(15:8)</td>
+                                        <td>Port Identifier</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(7:0)</td>
+                                        <td>Character to send</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0(31:16)</td>
+                                        <td>Port Status</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(15:0)</td>
+                                        <td>Error Code</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0002h</td>
+                        <td>
+                            Transmit Character
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(15:8)</td>
+                                        <td>Port Identifier</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(7:0)</td>
+                                        <td>Character to send</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0(31:16)</td>
+                                        <td>Port Status</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(15:0)</td>
+                                        <td>Error Code</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0003h</td>
+                        <td>
+                            Wait Buffer and Receive Character
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(7:0)</td>
+                                        <td>Port Identifier</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0(31:16)</td>
+                                        <td>Port Status</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(15:0)</td>
+                                        <td>Error Code</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1</td>
+                                        <td>Received Character</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0004h</td>
+                        <td>
+                            Receive Character
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(7:0)</td>
+                                        <td>Port Identifier</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0(31:16)</td>
+                                        <td>Port Status</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(15:0)</td>
+                                        <td>Error Code</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1</td>
+                                        <td>Received Character</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0005h</td>
+                        <td>
+                            Read Port Status
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(7:0)</td>
+                                        <td>Port Identifier</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0(31:16)</td>
+                                        <td>Port Status</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(15:0)</td>
+                                        <td>Error Code</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </article>
+            <article class="syscall-description">
+                <h1>Category 0002h: Video Services</h1>
+                <table>
+                    <tr>
+                        <td>0000h</td>
+                        <td>
+                            Set Video Mode
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(15:0)</td>
+                                        <td>Video mode</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>A0</td>
+                                        <td>
+                                            Video Mode Paramter Table pointer
+                                            when success, 0 when fail
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0001h</td>
+                        <td>
+                            Get Video Mode Parameters
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(15:0)</td>
+                                        <td>Video mode</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>A0</td>
+                                        <td>
+                                            Video Mode Paramter Table pointer
+                                            when success, 0 when fail
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0002h</td>
+                        <td>
+                            Get Video Adapter Status
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0(15:0)</td>
+                                        <td>Current Video Mode</td>
+                                    </tr>
+                                    <tr>
+                                        <td>A0</td>
+                                        <td>
+                                            Video Mode Paramter Table pointer
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0003h</td>
+                        <td>
+                            Set Text Cursor Shape
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(15:8)</td>
+                                        <td>Scan Row Start</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(15:8)</td>
+                                        <td>Scan Row End</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0004h</td>
+                        <td>
+                            Set Text Cursor Position
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(15:8)</td>
+                                        <td>Row</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(15:8)</td>
+                                        <td>Column</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0005h</td>
+                        <td>
+                            Get Text Cursor Position and Shape
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0(31:24)</td>
+                                        <td>Scan Row Start</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(23:16)</td>
+                                        <td>Scan Row End</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(15:8)</td>
+                                        <td>Row</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(15:8)</td>
+                                        <td>Column</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0006h</td>
+                        <td>
+                            Scroll or Clear Text Area
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(15:0)</td>
+                                        <td>
+                                            Lines to scroll (scroll up if
+                                            positive, scroll down if negative,
+                                            clear if 0)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>D2</td>
+                                        <td>Text Color Attribute</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D3(31:24)</td>
+                                        <td>Upper Row Index</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D3(23:16)</td>
+                                        <td>Lower Row Index</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D3(15:8)</td>
+                                        <td>Left Column Index</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D3(7:0)</td>
+                                        <td>Right Column Index</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0007h</td>
+                        <td>
+                            Read Character and Attribute at Cursor Position
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0(15:8)</td>
+                                        <td>Attribute</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(15:8)</td>
+                                        <td>Character</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0008h</td>
+                        <td>
+                            Write Character and Attribute at Cursor Position
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(15:8)</td>
+                                        <td>Attribute</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(15:8)</td>
+                                        <td>Character</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0009h</td>
+                        <td>
+                            Write String
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(15:8)</td>
+                                        <td>String Length</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D2(9)</td>
+                                        <td>String contains attribute</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D2(8)</td>
+                                        <td>Update cursor</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D2(7:0)</td>
+                                        <td>Attribute</td>
+                                    </tr>
+                                    <tr>
+                                        <td>A0</td>
+                                        <td>String pointer</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>000Ah</td>
+                        <td>
+                            Write ANSI Teletype String
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(15:8)</td>
+                                        <td>String Length</td>
+                                    </tr>
+                                    <tr>
+                                        <td>A0</td>
+                                        <td>String pointer</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>000Bh</td>
+                        <td>
+                            Set Text Font Data
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>A0</td>
+                                        <td>Glyph data pointer</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>000Ch</td>
+                        <td>
+                            Set Palette
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(15:0)</td>
+                                        <td>Palette size in 3-byte unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td>A0</td>
+                                        <td>Palette data pointer</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </article>
+            <article class="syscall-description">
+                <h1>Category 0003h: Keyboard / Pointing Device Services</h1>
+                <table>
+                    <tr>
+                        <td>0000h</td>
+                        <td>
+                            Wait and Get Keyboard Stroke
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0(15:8)</td>
+                                        <td>Device Identifier</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(15:8)</td>
+                                        <td>ASCII Character</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0001h</td>
+                        <td>
+                            Get Keyboard Stroke
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0(15:8)</td>
+                                        <td>Device Identifier</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(15:8)</td>
+                                        <td>ASCII Character</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0003h</td>
+                        <td>
+                            Check Keyboard Flags
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(7:0)</td>
+                                        <td>Device Identifier</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0(11)</td>
+                                        <td>Insert active</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(10)</td>
+                                        <td>CapsLock active</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(9)</td>
+                                        <td>NumLock active</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(8)</td>
+                                        <td>ScrollLock active</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(7)</td>
+                                        <td>Left Alt pressed</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(6)</td>
+                                        <td>Right Alt pressed</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(5)</td>
+                                        <td>Left Ctrl pressed</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(4)</td>
+                                        <td>Right Ctrl pressed</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(3)</td>
+                                        <td>Left Meta pressed</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(2)</td>
+                                        <td>Right Meta pressed</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(1)</td>
+                                        <td>Left Shift pressed</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D0(0)</td>
+                                        <td>Right Shift pressed</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0004h</td>
+                        <td>Flush Keyboard Buffer</td>
+                    </tr>
+                    <tr>
+                        <td>0005h</td>
+                        <td>Set Mouse Parameter</td>
+                    </tr>
+                    <tr>
+                        <td>0006h</td>
+                        <td>Get Mouse Status</td>
+                    </tr>
+                    <tr>
+                        <td>0007h</td>
+                        <td>Get Mouse Movement</td>
+                    </tr>
+                </table>
+            </article>
+            <article class="syscall-description">
+                <h1>Category 0004h: Storage Services</h1>
+                <table>
+                    <tr>
+                        <td>0000h</td>
+                        <td>
+                            Reset Storage System
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(7:0)</td>
+                                        <td>Drive Identifier</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0001h</td>
+                        <td>
+                            Get Drive Parameters
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(7:0)</td>
+                                        <td>Drive Identifier</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0</td>
+                                        <td>Drive Status</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0002h</td>
+                        <td>
+                            Get Drive Parameters
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(7:0)</td>
+                                        <td>Drive Identifier</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>A0</td>
+                                        <td>Drive Parameter Table Pointer</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0003h</td>
+                        <td>
+                            Read Sectors CHS
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(31:24)</td>
+                                        <td>Drive Identifier</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(23:16)</td>
+                                        <td>Head</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(15:6)</td>
+                                        <td>Cylinder</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(5:0)</td>
+                                        <td>Sector</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(7:0)</td>
+                                        <td>Sectors to Read</td>
+                                    </tr>
+                                    <tr>
+                                        <td>A0</td>
+                                        <td>Buffer pointer</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0</td>
+                                        <td>Drive Status</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1</td>
+                                        <td>Sectors Read</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0004h</td>
+                        <td>
+                            Write Sectors CHS
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(31:24)</td>
+                                        <td>Drive Identifier</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(23:16)</td>
+                                        <td>Head</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(15:6)</td>
+                                        <td>Cylinder</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(5:0)</td>
+                                        <td>Sector</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(7:0)</td>
+                                        <td>Sectors to Write</td>
+                                    </tr>
+                                    <tr>
+                                        <td>A0</td>
+                                        <td>Buffer pointer</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0</td>
+                                        <td>Drive Status</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1</td>
+                                        <td>Sectors Written</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0005h</td>
+                        <td>
+                            Verify Sectors CHS
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(31:24)</td>
+                                        <td>Drive Identifier</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(23:16)</td>
+                                        <td>Head</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(15:6)</td>
+                                        <td>Cylinder</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(5:0)</td>
+                                        <td>Sector</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(7:0)</td>
+                                        <td>Sectors to Verify</td>
+                                    </tr>
+                                    <tr>
+                                        <td>A0</td>
+                                        <td>Buffer pointer</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0</td>
+                                        <td>Drive Status</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1</td>
+                                        <td>Sectors Verified</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0006h</td>
+                        <td>
+                            Read Sectors LBA
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(31:24)</td>
+                                        <td>Drive Identifier</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(23:16)</td>
+                                        <td>Sectors to Read</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(15:0)</td>
+                                        <td>LBA(47:32)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D2</td>
+                                        <td>LBA(31:0)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>A0</td>
+                                        <td>Buffer pointer</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0</td>
+                                        <td>Drive Status</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1</td>
+                                        <td>Sectors Read</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0007h</td>
+                        <td>
+                            Write Sectors LBA
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D1(31:24)</td>
+                                        <td>Drive Identifier</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(23:16)</td>
+                                        <td>Sectors to Write</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1(15:0)</td>
+                                        <td>LBA(47:32)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D2</td>
+                                        <td>LBA(31:0)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>A0</td>
+                                        <td>Buffer pointer</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0</td>
+                                        <td>Drive Status</td>
+                                    </tr>
+                                    <tr>
+                                        <td>D1</td>
+                                        <td>Sectors Written</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </article>
+            <article class="syscall-description">
+                <h1>Category FFFFh: Miscellaneous Features</h1>
+                <table>
+                    <tr>
+                        <td>0000h</td>
+                        <td>Power Off System</td>
+                    </tr>
+                    <tr>
+                        <td>0001h</td>
+                        <td>
+                            Get Device Tree
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>A0</td>
+                                        <td>Device Tree Pointer</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0002h</td>
+                        <td>
+                            Get System Memory Map Table
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>A0</td>
+                                        <td>System Memory Map Table Pointer</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>0003h</td>
+                        <td>
+                            Change Processor Clock
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameters</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0</td>
+                                        <td>
+                                            Desired Processor Clock in kHz unit
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D0</td>
+                                        <td>
+                                            Changed Processor Clock in kHz unit
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </article>
+        </section>
+        <section>
+            <h1>External Interfaces</h1>
+        </section>
+        <section>
+            <h1>Power Supply</h1>
+        </section>
+        <section>
+            <h1>Debugging Interfaces</h1>
+        </section>
+
+        <footer class="print"></footer>
+
+        <script type="text/javascript" src="index.js"></script>
+    </body>
+</html>

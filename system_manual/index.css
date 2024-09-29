@@ -1,0 +1,153 @@
+@media screen {
+    .print {
+        display: none;
+    }
+}
+
+@media print {
+    a {
+        color: black;
+        text-decoration: none;
+    }
+
+    :root {
+        font-size: 0.8em;
+    }
+}
+
+@page {
+    size: a4 portrait;
+    margin: 11mm 17mm 17mm 17mm;
+}
+
+figcaption, caption {
+    caption-side: bottom;
+    font-weight: bold;
+    text-align: center;
+}
+
+section {
+    page-break-inside: avoid;
+}
+
+table.list {
+    border-collapse: collapse;
+}
+
+table.list td {
+    padding: 2px;
+}
+
+table.list tr > th {
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+table.list tr:nth-child(even) {
+    background-color: lightgray;
+}
+
+body > h1 {
+    text-align: center;
+}
+
+#docinfo {
+    text-align: end;
+}
+
+#toc, #toc ul,
+#tof, #tof ul,
+#tot, #tot ul {
+    list-style-type: none;
+}
+
+#toc li,
+#tof li,
+#tot li {
+    margin: 4px 0;
+}
+
+#toc > li > div > a {
+    font-size: large;
+    font-weight: bold;
+}
+
+#toc li > div,
+#tof li > div,
+#tot li > div {
+    display: flex;
+};
+
+#toc li > div > a,
+#tof li > div > a,
+#tot li > div > a {
+    display: block;
+    flex: 1 0 auto;
+}
+
+#toc li > div > div.dots,
+#tof li > div > div.dots,
+#tot li > div > div.dots {
+    flex: 1 0 auto;
+    background: radial-gradient(circle at 50% 0.8em, #999 8%, transparent 8%);
+    background-size: 0.5em;
+    background-repeat: repeat-x;
+}
+
+figure.memory-map {
+    display: inline-block;
+}
+
+figure.memory-map > div {
+    display: flex;
+    flex-direction: row;
+}
+
+figure.memory-map > div:not(:last-of-type) {
+    border-bottom: 1px solid;
+}
+
+figure.memory-map > div > div:first-child {
+    border-left: 1px solid;
+    border-right: 1px solid;
+    padding: 2px 4px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column-reverse;
+    font-family: monospace;
+    gap: 1em;
+}
+
+figure.memory-map > div > div:last-child {
+    display: block;
+    margin: auto 8px;
+    text-align: center;
+}
+
+article.register-description > table tr > :first-child {
+    width: 6.5em;
+    padding-right: 0.5em;
+    vertical-align: top;
+}
+
+article.register-description > table th {
+    text-align: left;
+}
+
+article.register-description > table:not(:first-of-type) tr > td:first-child {
+    text-align: right;
+}
+
+article.syscall-description > table tr > :first-child {
+    width: 6.5em;
+    padding-right: 0.5em;
+    vertical-align: top;
+}
+
+article.syscall-description > table th {
+    text-align: left;
+}
+
+article.syscall-description > table tbody > tr > td:first-child {
+    text-align: right;
+}
