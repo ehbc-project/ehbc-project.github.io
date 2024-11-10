@@ -125,7 +125,7 @@ figure.memory-map > div > div:last-child {
 }
 
 article.register-description > table tr > :first-child {
-    width: 6.5em;
+    width: 4em;
     padding-right: 0.5em;
     vertical-align: top;
 }
@@ -139,7 +139,7 @@ article.register-description > table:not(:first-of-type) tr > td:first-child {
 }
 
 article.syscall-description > table tr > :first-child {
-    width: 6.5em;
+    width: 4m;
     padding-right: 0.5em;
     vertical-align: top;
 }
